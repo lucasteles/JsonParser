@@ -10,10 +10,16 @@ namespace JsonValidator
     {
         static void Main(string[] args)
         {
-            string Caminho = @"C:\Users\rmendonca\Documents\GitHub\JsonValidator\Test.json";
+            string Caminho = @"..\..\..\TesteSimples.json";
 
             Json Validador = new Json();
             Validador.ValidJson(Caminho);
+
+            if(Validador.Aceito)
+                Console.WriteLine("Aceitou");
+            else
+                Console.WriteLine("Erro\nLinha:"+Validador.Line.ToString());
+            Console.ReadKey();
         }
     }
 }
