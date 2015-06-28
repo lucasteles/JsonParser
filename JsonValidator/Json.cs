@@ -32,8 +32,6 @@ namespace JsonValidator
                 {
                     Caractere = oReader.ReadChar();
                     Loop = false;
-                    if(Line==3)
-                        Loop = false;
 
                     switch (Estado)
                     {
@@ -70,6 +68,8 @@ namespace JsonValidator
                                 Estado = 7;
 
                             if (Caractere == '\r')
+                                Estado = 2;
+                            if (Caractere == '\t')
                                 Estado = 2;
                             if (Caractere == ' ')
                                 Estado = 2;
@@ -115,6 +115,8 @@ namespace JsonValidator
                             if (Caractere == '"')
                                 Estado = 4;
                             if (Caractere == '\r')
+                                Estado = 3;
+                            if (Caractere == '\t')
                                 Estado = 3;
                             if (Caractere == ' ')
                                 Estado = 3;
@@ -174,6 +176,8 @@ namespace JsonValidator
                             }
                             if (Caractere == '\r')
                                 Estado = 9;
+                            if (Caractere == '\t')
+                                Estado = 9;
                             if (Caractere == ' ')
                                 Estado = 9;
                             
@@ -217,6 +221,8 @@ namespace JsonValidator
                                     Estado = 32;
                             }
                             if (Caractere == '\r')
+                                Estado = 32;
+                            if (Caractere == '\t')
                                 Estado = 32;
                             if (Caractere == ' ')
                                 Estado = 32;
