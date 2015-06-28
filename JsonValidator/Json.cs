@@ -32,7 +32,7 @@ namespace JsonValidator
                 {
                     Caractere = oReader.ReadChar();
                     Loop = false;
-                    if(Line==42)
+                    if(Line==3)
                         Loop = false;
 
                     switch (Estado)
@@ -79,6 +79,22 @@ namespace JsonValidator
                                 Estado = 2;
                                 Line++;
                             }
+
+                            if (Caractere == '}')
+                            {
+                                char c = (char)Pilha.Pop();
+
+                                if(c == 'D')
+                                    Estado = 32;
+                            }
+                            if (Caractere == ']')
+                            {
+                                char c = (char)Pilha.Pop();
+
+                                if (c == 'A')
+                                    Estado = 32;
+                            }
+
                             if (Caractere == '-')
                                 Estado = 14;
                             if (Caractere == '0')
@@ -107,6 +123,20 @@ namespace JsonValidator
                             {
                                 Estado = 3;
                                 Line++;
+                            }
+                            if (Caractere == '}')
+                            {
+                                char c = (char)Pilha.Pop();
+
+                                if(c == 'D')
+                                    Estado = 32;
+                            }
+                            if (Caractere == ']')
+                            {
+                                char c = (char)Pilha.Pop();
+
+                                if (c == 'A')
+                                    Estado = 32;
                             }
                             Loop = true;
                             break;
@@ -219,7 +249,11 @@ namespace JsonValidator
                 }
 
                 if (Estado == 32)
-                    Aceito = true;
+                {
+                    char c = (char)Pilha.Pop();
+                    if(c == '$')
+                        Aceito = true;
+                }
             }
         }
 

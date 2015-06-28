@@ -10,7 +10,7 @@ namespace JsonValidator
     {
         static void Main(string[] args)
         {
-            string Caminho = @"..\..\..\Test.json";
+            string Caminho = @"..\..\..\TesteSimples.json";
 
             Json Validador = new Json();
             Validador.ValidJson(Caminho);
