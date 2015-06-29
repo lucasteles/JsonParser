@@ -1,0 +1,10 @@
+C:\Users\LUCAS\documents\visual studio 2013\Projects\JsonValidator\JsonValidator\bin\Release\JsonValidator.exe.config
+C:\Users\LUCAS\documents\visual studio 2013\Projects\JsonValidator\JsonValidator\bin\Release\JsonValidator.exe
+C:\Users\LUCAS\documents\visual studio 2013\Projects\JsonValidator\JsonValidator\bin\Release\JsonValidator.pdb
+C:\Users\LUCAS\documents\visual studio 2013\Projects\JsonValidator\JsonValidator\obj\Release\JsonValidator.exe
+C:\Users\LUCAS\documents\visual studio 2013\Projects\JsonValidator\JsonValidator\obj\Release\JsonValidator.pdb
+E:\Git\JsonValidator\JsonValidator\JsonValidator\bin\Release\JsonValidator.exe.config
+E:\Git\JsonValidator\JsonValidator\JsonValidator\bin\Release\JsonValidator.exe
+E:\Git\JsonValidator\JsonValidator\JsonValidator\bin\Release\JsonValidator.pdb
+E:\Git\JsonValidator\JsonValidator\JsonValidator\obj\Release\JsonValidator.exe
+E:\Git\JsonValidator\JsonValidator\JsonValidator\obj\Release\JsonValidator.pdb
