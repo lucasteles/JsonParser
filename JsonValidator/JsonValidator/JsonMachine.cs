@@ -25,6 +25,8 @@ namespace JsonValidator
         private BinaryReader Reader;
         public string CODE = String.Empty;
         private Stack<JsonCollect> FlowControl = new Stack<JsonCollect>();
+        private Stack<int[]> FlowControlNum = new Stack<int[]>();
+
         private string Message = string.Empty;
         States State = States.INIT;
         bool genInString = false;
@@ -73,16 +75,42 @@ namespace JsonValidator
                 ret = false;
                 message = Message;
             }
+
+            if (State == States.AD && FlowControl.Count > 0)
+            {
+                ret = false;
+                
+                if (FlowControl.Peek() == JsonCollect.Array)
+                    message = String.Format("Expect end of array \"]\" of {0}:{1}", FlowControlNum.Peek()[0], FlowControlNum.Peek()[1]);
+
+                if (FlowControl.Peek() == JsonCollect.Dictionary)
+                    message = String.Format("Expect end of dictionary \"}}\" of {0}:{1}", FlowControlNum.Peek()[0], FlowControlNum.Peek()[1]);
+            }
+
+            if (State != States.AD)
+                ret = false;
+
             return ret;
         }
 
 
         private void ErrMsg(char c)
         {
-            Message = String.Format("unexpected token \"{0}\" at {1}:{2}", c.ToString(), Lines + 1, Cols + 1);
+            Message = String.Format("unexpected token \"{0}\" at {1}:{2}", c.ToString(), Lines + 1, Cols );
             State = States.ERR;
         }
 
+        private void PushFlow(JsonCollect type)
+        {
+            FlowControl.Push(type);
+            FlowControlNum.Push(new int[]{ Lines+1, Cols  });
+        }
+
+        private JsonCollect PopFlow()
+        {
+            FlowControlNum.Pop();
+            return FlowControl.Pop();
+        }
         private void MainTransitionFunction(char c)
         {
             int loop = 1;
@@ -92,12 +120,12 @@ namespace JsonValidator
                 switch (c){
                     case JsonTokens.OpenList:
                         State = States.VAL;
-                        FlowControl.Push(JsonCollect.Array);
+                        PushFlow(JsonCollect.Array);
                         break;
 
                     case JsonTokens.OpenDict:
                         State = States.KEY;
-                        FlowControl.Push(JsonCollect.Dictionary);
+                        PushFlow(JsonCollect.Dictionary);
                         break;
 
                     default:
@@ -142,11 +170,11 @@ namespace JsonValidator
             case States.VAL:
 
                 if (c == JsonTokens.OpenList)
-                    FlowControl.Push(JsonCollect.Array);
+                    PushFlow(JsonCollect.Array);
 
                 else if (c == JsonTokens.OpenDict)
                 {
-                    FlowControl.Push(JsonCollect.Dictionary);
+                    PushFlow(JsonCollect.Dictionary);
                     State = States.KEY;
                 }
                 else if (c == JsonTokens.CloseDict)
@@ -154,7 +182,7 @@ namespace JsonValidator
                     if (FlowControl.Peek() == JsonCollect.Dictionary)
                     {
                         State = States.AD;
-                        FlowControl.Pop();
+                        PopFlow();
                     }
                     else
                         ErrMsg(c);
@@ -164,7 +192,7 @@ namespace JsonValidator
                     if (FlowControl.Peek() == JsonCollect.Array)
                     {
                         State = States.AD;
-                        FlowControl.Pop();
+                        PopFlow();
                     }
                     else
                         ErrMsg(c);
@@ -200,7 +228,7 @@ namespace JsonValidator
                     if (FlowControl.Peek() == JsonCollect.Dictionary)
                     {
                         State = States.AD;
-                        FlowControl.Pop();
+                        PopFlow();
                     }
                     else
                         ErrMsg(c);
@@ -210,7 +238,7 @@ namespace JsonValidator
                     if (FlowControl.Peek() == JsonCollect.Array)
                     {
                         State = States.AD;
-                        FlowControl.Pop();
+                        PopFlow();
                     }
                     else
                         ErrMsg(c);
@@ -252,7 +280,7 @@ namespace JsonValidator
                     if (FlowControl.Peek() == JsonCollect.Dictionary)
                     {
                         State = States.AD;
-                        FlowControl.Pop();
+                        PopFlow();
                     }
                     else
                         ErrMsg(c);
@@ -262,7 +290,7 @@ namespace JsonValidator
                     if (FlowControl.Peek() == JsonCollect.Array)
                     {
                         State = States.AD;
-                        FlowControl.Pop();
+                        PopFlow();
                     }
                     else
                         ErrMsg(c);
@@ -331,7 +359,7 @@ namespace JsonValidator
                     if (FlowControl.Peek() == JsonCollect.Dictionary)
                     {
                         State = States.AD;
-                        FlowControl.Pop();
+                        PopFlow();
                     }
                     else
                         ErrMsg(c);
@@ -341,7 +369,7 @@ namespace JsonValidator
                     if (FlowControl.Peek() == JsonCollect.Array)
                     {
                         State = States.AD;
-                        FlowControl.Pop();
+                        PopFlow();
                     }
                     else
                         ErrMsg(c);
@@ -362,7 +390,7 @@ namespace JsonValidator
                     if (FlowControl.Peek() == JsonCollect.Dictionary)
                     {
                         State = States.AD;
-                        FlowControl.Pop();
+                        PopFlow();
                     }
                     else
                         ErrMsg(c);
@@ -372,7 +400,7 @@ namespace JsonValidator
                     if (FlowControl.Peek() == JsonCollect.Array)
                     {
                         State = States.AD;
-                        FlowControl.Pop();
+                        PopFlow();
                     }
                     else
                         ErrMsg(c);
@@ -394,7 +422,7 @@ namespace JsonValidator
                      if (FlowControl.Peek() == JsonCollect.Dictionary)
                      {
                          State = States.AD;
-                         FlowControl.Pop();
+                         PopFlow();
                      }
                      else
                          ErrMsg(c);
@@ -404,7 +432,7 @@ namespace JsonValidator
                      if (FlowControl.Peek() == JsonCollect.Array)
                      {
                          State = States.AD;
-                         FlowControl.Pop();
+                         PopFlow();
                      }
                      else
                          ErrMsg(c);
@@ -457,7 +485,7 @@ namespace JsonValidator
                         if (FlowControl.Peek() == JsonCollect.Dictionary)
                         {
                             State = States.AD;
-                            FlowControl.Pop();
+                            PopFlow();
                         }
                         else
                             ErrMsg(c);
@@ -467,7 +495,7 @@ namespace JsonValidator
                         if (FlowControl.Peek() == JsonCollect.Array)
                         {
                             State = States.AD;
-                            FlowControl.Pop();
+                            PopFlow();
                         }
                         else
                             ErrMsg(c);
