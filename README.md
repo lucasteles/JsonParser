@@ -1,5 +1,5 @@
 # JsonValidator
-Analisador sintático de JSON em C#
+ JSON parser in C#
 
 ## How to use
 
@@ -42,7 +42,7 @@ On file
 ]
 ```
 
-Generate
+Generates this
 ```cs
 var data = new List < object > () {
 	new Dictionary < string, object > () {
