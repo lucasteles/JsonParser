@@ -1,4 +1,4 @@
-# JsonValidator
+# JsonParser
  JSON parser in C#
 
 ## How to use
