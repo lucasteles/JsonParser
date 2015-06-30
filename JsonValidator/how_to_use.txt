@@ -1,7 +1,0 @@
-
-Apenas Validar
-$ JsonValidator <arquivo.json>
-
-
-Gerar arquivo CS
-$ JsonValidator <arquivo.json> -o <saida.cs>

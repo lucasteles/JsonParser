@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JsonValidator
+namespace JsonParser
 {
     class Program
     {
@@ -45,9 +45,9 @@ namespace JsonValidator
                        using (StreamWriter outfile = new StreamWriter(GenerateFile))
                            outfile.Write(machine.GetCode());
 
-
-                   exit();
                }
+
+               exit();
              }
 }
        
@@ -80,6 +80,7 @@ namespace JsonValidator
                         break;
                 }
 
+            
         }
 
         private static void DumpUsage()
@@ -87,11 +88,11 @@ namespace JsonValidator
             Console.WriteLine(
                 @"
 Validate only
-$ JsonValidator <file.json>
+$ JsonParser <file.json>
 
 
 Generate CSharp equivalent
-$ JsonValidator <file.json> -o <out.cs>
+$ JsonParser <file.json> -o <out.cs>
 
                 "
                 );

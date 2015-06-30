@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JsonValidator
+namespace JsonParser
 {
     public class Getopt
     {
@@ -35,6 +35,7 @@ namespace JsonValidator
             if (options.Count > 0 && !options.Peek().StartsWith("-"))
             {
                 value = options.Pop();
+                value = value.Replace("\"", "");
             }
             
             if (!mainValue && ret.Contains("."))
