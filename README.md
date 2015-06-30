@@ -5,12 +5,12 @@
 
 Validate only
 ```sh
-$ JsonValidator <file.json>
+$ JsonParser <file.json>
 ```
 
 Generate C# equivalent (Mock)
 ```sh
-$ JsonValidator <file.json> -o <out.cs>
+$ JsonParser <file.json> -o <out.cs>
 ```
 
 ##Example
