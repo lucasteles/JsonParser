@@ -129,6 +129,7 @@ namespace JsonParser
 
         public void Reset()
         {
+            MainStack.Clear();
             Started = false;
         }
 
@@ -171,6 +172,10 @@ namespace JsonParser
                 var validStack = !(t.Pop == null);
                 var match = t.Input.Compile()(input);
 
+                var noStack = true;
+                if (t.Push != null && t.Pop != null)
+                    noStack = !(t.Pop.Equals(t.Push));
+
 
                 if (match)
                 {
@@ -178,7 +183,8 @@ namespace JsonParser
                     {
                         if (MainStack.Count > 0 && MainStack.Peek().Equals(t.Pop))
                         {
-                            Pop();
+                            if (noStack)
+                                Pop();
                             State = t.State;
                             ret = true;
                         }
@@ -192,7 +198,7 @@ namespace JsonParser
                     }
 
 
-                    if (!(t.Push == null))
+                    if (!(t.Push == null) && noStack)
                         Push(t.Push);
 
                 }
@@ -202,6 +208,9 @@ namespace JsonParser
                     break;
             }
 
+
+            if (!ret) // invalida resultados da maquina
+                MainStack.Push(null);
 
             if (HasEmptyTransitions[State])
                 DoEmptyTransitions();
@@ -222,7 +231,9 @@ namespace JsonParser
             foreach (var t in stateTrans) {
                 var validStack = !(t.Pop == null);
                 var match = t.Input == null;
-
+                var noStack = true;
+                if (t.Push != null && t.Pop != null)
+                    noStack = !(t.Pop.Equals(t.Push));
 
                 if (match)
                 {
@@ -230,7 +241,9 @@ namespace JsonParser
                     {
                         if (MainStack.Count > 0 && MainStack.Peek().Equals(t.Pop))
                         {
-                            Pop();
+                            if (noStack)
+                                Pop();
+
                             State = t.State;
                         }
                         else
@@ -243,7 +256,7 @@ namespace JsonParser
                         this.State = t.State;
                     }
 
-                    if (!(t.Push == null))
+                    if (!(t.Push == null) && noStack)
                         Push(t.Push);
 
                     changed = true;

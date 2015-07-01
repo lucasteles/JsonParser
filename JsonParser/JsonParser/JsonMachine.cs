@@ -29,7 +29,9 @@ namespace JsonParser
 
 
         bool genInString = false;
-        
+        int tabControl = 1;
+
+
         int Lines = 0, Cols = 0;
         Automaton<States> Machine = new Automaton<States>();
 
@@ -88,10 +90,10 @@ namespace JsonParser
                 if (message.Equals(String.Empty))
                 {
                     if ((JsonCollect)Machine.Peek() == JsonCollect.Array)
-                        message = String.Format("Expect end of array \"]\" of {0}:{1}", FlowControlNum.Peek()[0], FlowControlNum.Peek()[1]);
+                        message = String.Format("Expected end of array \"]\" of {0}:{1}", FlowControlNum.Peek()[0], FlowControlNum.Peek()[1]);
 
                     if ((JsonCollect)Machine.Peek() == JsonCollect.Dictionary)
-                        message = String.Format("Expect end of dictionary \"}}\" of {0}:{1}", FlowControlNum.Peek()[0], FlowControlNum.Peek()[1]);
+                        message = String.Format("Expected end of dictionary \"}}\" of {0}:{1}", FlowControlNum.Peek()[0], FlowControlNum.Peek()[1]);
                 }
             }
 
@@ -104,11 +106,12 @@ namespace JsonParser
             return String.Format("unexpected token \"{0}\" at {1}:{2}", c.ToString(), Lines + 1, Cols );
         }
 
-                
-        private void gen(char c) { 
 
-            if (c==JsonTokens.StringDelimiter)
-                genInString=!genInString;
+        private void gen(char c)
+        {
+
+            if (c == JsonTokens.StringDelimiter)
+                genInString = !genInString;
 
             if (genInString)
             {
@@ -116,30 +119,34 @@ namespace JsonParser
                 return;
             }
 
-            var tabs = new String('\t', Machine.StackLenght()+1);
-            
+            var tabs = new String('\t', tabControl);
+
 
 
             if (c == JsonTokens.OpenList)
             {
                 GeneratedCode.Append("\n");
                 GeneratedCode.Append(tabs);
-                GeneratedCode.Append("new List<object>(){\n");
+                GeneratedCode.Append("new List<object>(){\n\t");
+                GeneratedCode.Append(tabs);
+                tabControl++;
                 return;
             }
 
             if (c == JsonTokens.CloseList)
             {
                 GeneratedCode.Append("\n");
-                GeneratedCode.Append(tabs);
-                GeneratedCode.Append( "}" );
+                GeneratedCode.Append(tabs.Substring(1));
+                GeneratedCode.Append("}");
+                tabControl--;
                 return;
             }
-           
+
             if (c == JsonTokens.OpenDict)
             {
-                GeneratedCode.Append(tabs);
-                GeneratedCode.Append( "new Dictionary<string,object>(){\n"+tabs+"{ ");
+                tabControl++;
+                GeneratedCode.Append("new Dictionary<string,object>(){\n" + tabs + "\t{");
+
                 return;
             }
 
@@ -149,29 +156,30 @@ namespace JsonParser
                 return;
             }
 
-            
+
             if (c == JsonTokens.ValueSeparator)
             {
                 if ((JsonCollect)Machine.Peek() == JsonCollect.Dictionary)
-                    GeneratedCode.Append(" },\n"+tabs+"{");
+                    GeneratedCode.Append(" },\n" + tabs + "{");
                 else if ((JsonCollect)Machine.Peek() == JsonCollect.Array)
-                    GeneratedCode.Append(",");
+                    GeneratedCode.Append(",\n" + tabs);
 
                 return;
             }
             if (c == JsonTokens.CloseDict)
             {
-                GeneratedCode.Append(tabs);
-                GeneratedCode.Append("}\n}");
+                tabControl--;
+                GeneratedCode.Append("}");
                 return;
             }
-                
+
             GeneratedCode.Append(c);
         }
         public string GetCode()
         {
-            return "var data = \n" + GeneratedCode.ToString() + ";";
+            return "var data = " + GeneratedCode.ToString() + ";";
         }
+
 
    
         private void DefineMachine()
