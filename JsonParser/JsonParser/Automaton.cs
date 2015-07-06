@@ -12,9 +12,9 @@ namespace JsonParser
     {
        
 
-        private struct StateTransition<T>
+        private struct StateTransition<Ts>
         {
-            public T State;
+            public Ts State;
             public Expression<Func<char, bool>> Input;
             public object Push;
             public object Pop;
