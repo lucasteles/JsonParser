@@ -36,6 +36,11 @@ ipch/
 *.bak
 *.v12.suo
 
+
+# This solution uses NuGet package restore so don't check in
+# the actual binaries
+packages/
+
 #Tools
 _ReSharper.*
 _ReSharper*/
@@ -48,6 +53,4 @@ Ankh.NoLoad
 .svn
  
 # Include DLLs if they're in the NuGet packages directory
-!/packages/*/lib/*.dll
-!/packages/*/lib/*/*.dll
 !Binaries/*.*
