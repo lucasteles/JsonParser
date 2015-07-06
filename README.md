@@ -1,4 +1,5 @@
 # JsonParser 
+[![License](http://img.shields.io/:license-mit-blue.svg)](http://csmacnz.mit-license.org)
 [![Build status](https://ci.appveyor.com/api/projects/status/gvgvskk5jxfri1bo?svg=true)](https://ci.appveyor.com/project/lucasteles/jsonparser) [![Source Browser](https://img.shields.io/badge/Browse-Source-green.svg)](http://sourcebrowser.io/Browse/lucasteles/JsonParser/)
 
  JSON parser in C#
