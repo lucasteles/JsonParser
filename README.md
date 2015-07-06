@@ -1,7 +1,7 @@
-# JsonParser
+# JsonParser [![Build status](https://ci.appveyor.com/api/projects/status/gvgvskk5jxfri1bo?svg=true)](https://ci.appveyor.com/project/lucasteles/jsonparser)
+
  JSON parser in C#
 
-AppVeyor Status: [![Build status](https://ci.appveyor.com/api/projects/status/gvgvskk5jxfri1bo)](https://ci.appveyor.com/project/lucasteles/jsonparser)
 
  - **Online test [HERE!!](http://lucasteles.github.io/JsonParser)**
  
