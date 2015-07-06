@@ -170,7 +170,7 @@ namespace JsonParser
             {
 
                 var validStack = !(t.Pop == null);
-                var match = t.Input.Compile()(input);
+                var match = t.Input!=null && t.Input.Compile()(input);
 
                 var noStack = true;
                 if (t.Push != null && t.Pop != null)
@@ -225,6 +225,10 @@ namespace JsonParser
             if (!Transitions.ContainsKey(State))
                 return;
 
+
+            if (MainStack.Count > 0 && MainStack.Peek() == null)
+                return;
+
             var stateTrans = Transitions[State];
             var changed = false;
 
@@ -272,7 +276,7 @@ namespace JsonParser
         }
 
 
-        public object Peek() { return MainStack.Peek(); }
+        public object Peek() { return MainStack.Count > 0 ? MainStack.Peek() : null; }
         public object Pop() {           
             DoOnStackPop(EventArgs.Empty, this);
             return MainStack.Pop(); 

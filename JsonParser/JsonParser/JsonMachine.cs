@@ -49,10 +49,10 @@ namespace JsonParser
             
             message = string.Empty;
             var loop = true;
-
+            char c = '\0';
             while (Reader.PeekChar() != -1 )
             {
-                var c = (char)Reader.ReadChar();
+                c = (char)Reader.ReadChar();
 
                 if (c == '\r')
                     continue;
@@ -89,11 +89,19 @@ namespace JsonParser
 
                 if (message.Equals(String.Empty))
                 {
-                    if ((JsonCollect)Machine.Peek() == JsonCollect.Array)
-                        message = String.Format("Expected end of array \"]\" of {0}:{1}", FlowControlNum.Peek()[0], FlowControlNum.Peek()[1]);
+                    if (Machine.StackLenght() == 0)
+                    {
+                        message = String.Format("Expected token after {0}", c);
+                    }
+                    else
+                    {
 
-                    if ((JsonCollect)Machine.Peek() == JsonCollect.Dictionary)
-                        message = String.Format("Expected end of dictionary \"}}\" of {0}:{1}", FlowControlNum.Peek()[0], FlowControlNum.Peek()[1]);
+                        if ((JsonCollect)Machine.Peek() == JsonCollect.Array)
+                            message = String.Format("Expected end of array \"]\" of {0}:{1}", FlowControlNum.Peek()[0], FlowControlNum.Peek()[1]);
+
+                        if ((JsonCollect)Machine.Peek() == JsonCollect.Dictionary)
+                            message = String.Format("Expected end of dictionary \"}}\" of {0}:{1}", FlowControlNum.Peek()[0], FlowControlNum.Peek()[1]);
+                    }
                 }
             }
 
@@ -159,9 +167,9 @@ namespace JsonParser
 
             if (c == JsonTokens.ValueSeparator)
             {
-                if ((JsonCollect)Machine.Peek() == JsonCollect.Dictionary)
+                if (Machine.StackLenght() > 0 && (JsonCollect)Machine.Peek() == JsonCollect.Dictionary)
                     GeneratedCode.Append(" },\n" + tabs + "{");
-                else if ((JsonCollect)Machine.Peek() == JsonCollect.Array)
+                else if (Machine.StackLenght() > 0 && (JsonCollect)Machine.Peek() == JsonCollect.Array)
                     GeneratedCode.Append(",\n" + tabs);
 
                 return;
@@ -169,6 +177,8 @@ namespace JsonParser
             if (c == JsonTokens.CloseDict)
             {
                 tabControl--;
+                GeneratedCode.Append("}\n");
+                GeneratedCode.Append(tabs.Substring(1));
                 GeneratedCode.Append("}");
                 return;
             }
